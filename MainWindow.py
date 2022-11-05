@@ -101,8 +101,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuTools.menuAction())
 
         self.actionNew_Card.triggered.connect(lambda state:self.spawnCardAdderWidget(MainWindow=MainWindow))
-        self.actionNew_Deck.triggered.connect(lambda x=self, y=MainWindow:self.spawnAddDeckWidget(parent=x, MainWindow=y))
-        self.actionEdit_deck.triggered.connect(lambda x=self, y=MainWindow:self.spawnDeckEditWidget(parent=x, MainWindow=y))
+        self.actionNew_Deck.triggered.connect(lambda state, x=self, y=MainWindow:self.spawnAddDeckWidget(parent=x, MainWindow=y))
+        self.actionEdit_deck.triggered.connect(lambda state, x=self, y=MainWindow:self.spawnDeckEditWidget(parent=x, MainWindow=y))
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

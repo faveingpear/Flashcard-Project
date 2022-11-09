@@ -12,6 +12,8 @@ from ast import Lambda
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Deck import *
 
+from CustomDictionary import DuplicateEntryError
+
 from Logger import MyLogger
 
 
@@ -63,18 +65,25 @@ class Ui_FlashCardAddWidget(object):
         top = self.plainTextEdit.toPlainText()
         bottom = self.plainTextEdit_2.toPlainText()
 
-        self.decks[deck_index].addCard(Card(
-            front_data=top,
-            back_data=bottom,
-            date_added="something",
-            parent_deck = self.decks[deck_index],
-            order_in_deck = len(self.decks[deck_index].cards)+1,
-            id=1
-        )
-        )
+        try:
+            self.decks[deck_index].addCard(Card(
+                front_data=top,
+                back_data=bottom,
+                date_added="something",
+                parent_deck = self.decks[deck_index],
+                order_in_deck = len(self.decks[deck_index].cards)+1,
+                id=1
+            )
+            )
 
-        self.plainTextEdit.clear()
-        self.plainTextEdit_2.clear()
+            
+            self.plainTextEdit.clear()
+            self.plainTextEdit_2.clear()
+
+        except DuplicateEntryError:
+            self.logger.info("Cannot add card " + top + " because it is alrady in the deck")
+            self.error_dialog = QtWidgets.QErrorMessage()
+            self.error_dialog.showMessage('Cannot add multiple cards with the same name')
 
     def __init__(self, parent, logger:MyLogger, decks) -> None:
         

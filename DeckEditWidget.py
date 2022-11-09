@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from Deck import *
 
 class Ui_DeckEditWidget(object):
     def setupUi(self, Form):
@@ -45,6 +46,8 @@ class Ui_DeckEditWidget(object):
         self.fillListView()
 
         self.deckComboBox.currentTextChanged.connect(lambda state:self.fillListView())
+        self.cardListView.itemClicked.connect(lambda item:self.fillCardWidgets(item=item))
+        self.addButton.clicked.connect(lambda state:self.saveCard())
 
     def __init__(self, parent, MainWindow, logger, decks):
         self.parent = parent
@@ -54,6 +57,31 @@ class Ui_DeckEditWidget(object):
 
         #self.widgets = [] # For keeping tack of the list view entries. 
         # Not needed since cardListView.clear does the same thing
+
+    def saveCard(self):
+
+        #self.selectedCard.front_data = self.topTextEdit.toPlainText()
+        #self.selectedCard.bottom_data = self.bottomTextEdit.toPlainText()
+
+        #self.fillListView()
+
+        self.decks[self.deckComboBox.currentIndex()].deleteCard(self.selectedCard.front_data)
+
+        newCard = Card(
+            front_data=self.topTextEdit.toPlainText(),
+            back_data=self.bottomTextEdit.toPlainText(),
+            date_added="filler",
+            id=1,
+            parent_deck=self.decks[self.deckComboBox.currentIndex()],
+            order_in_deck=1
+        )
+
+        self.decks[self.deckComboBox.currentIndex()].addCard(newCard)
+
+        self.selectedCard = newCard
+
+        self.fillListView()
+        #self.fillCardWidgets()
 
     def fillComboBox(self):
 
@@ -69,12 +97,10 @@ class Ui_DeckEditWidget(object):
 
             newWidget.setText(self.decks[self.deckComboBox.currentIndex()].cards[i].front_data)
 
-            #self.widgets.append(newWidget)
-
             self.cardListView.addItem(newWidget)
 
-        selected = self.cardListView.selectedIndexes()
-        print(selected)
+        #selected = self.cardListView.itemClicked.connect(lambda)
+        #print(selected)
 
 
         # for card in self.decks[self.deckComboBox.currentIndex()].cards:
@@ -86,9 +112,14 @@ class Ui_DeckEditWidget(object):
         #     self.cardListView.addItem(newWidget)
         #     pass
 
-    def fillCardWidgets(self, card):
+    def fillCardWidgets(self, item):
+        cardName = item.text()
+        card = self.decks[self.deckComboBox.currentIndex()].searchCard(cardName)
+        
+        self.topTextEdit.setPlainText(card.front_data)
+        self.bottomTextEdit.setPlainText(card.back_data)
 
-        pass
+        self.selectedCard = card
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate

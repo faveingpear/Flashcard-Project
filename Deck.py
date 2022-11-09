@@ -16,7 +16,7 @@ class Card:
 
     def genKey(self) -> base64:
         #return self.front_data
-        return base64.b64encode(self.front_data.encode("utf-8"))
+        return self.front_data
     
     def print(self) -> str:
         return self.front_data
@@ -33,6 +33,10 @@ class Deck:
         self.logger = logger
 
         self.logger.info("Created deck name:" + self.name)
+
+    def deleteCard(self, name):
+
+        self.cards.remove(name)
     
     def addCard(self, inputCard:Card):
         self.cards.append(key=inputCard.genKey(), value=inputCard)
@@ -41,6 +45,27 @@ class Deck:
     def getCard(self, index):
         self.logger.info("Retriving card " + self.cards[index].front_data)
         return self.cards[index]
+
+    def searchCard(self, name) -> Card:
+        # for card in self.cards:
+        #     if card.front_data == name:
+        #         self.logger.info("Card with name " + name + "found")
+        #         return card
+
+        # self.logger.info("No card with name " + name)
+        # self.logger.info("Current state of deck")
+        # self.cards.print()
+        
+        return self.cards.search(name)
+
+        # for i in range(len(self.cards)):
+
+        #     if self.cards[i].front_data == name:
+        #         self.logger.info("Card found with name " + name)
+        #         return self.cards[i]
+        #     else:
+        #         self.logger.info("No card with name " + name + " found")
+        #         return None
 
 # testDeck = Deck("Italian")
 # testDeck.addCard(Card(

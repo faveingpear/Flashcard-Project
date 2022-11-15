@@ -1,7 +1,5 @@
 
 from Logger import MyLogger
-
-
 class entry():
 
     def __init__(self,key,value) -> None:
@@ -11,9 +9,17 @@ class entry():
     def print(self):
         print("["  + str(self.key) + ":" + str(self.value) + "]")
 
+    def to_json(self):
+
+        jsonData = {
+            "key": self.key,
+            "value": self.value
+        }
+
+        return jsonData
+
 class DuplicateEntryError(Exception):
     pass
-
 class Dict():
 
     #entries:entry = [] #DO NOT MAKE THIS A CLASS VARIABLE
@@ -78,3 +84,9 @@ class Dict():
 
     def __len__(self):
         return len(self.entries)
+
+    def to_json(self):
+
+        return {
+            "entries":self.entries
+        }

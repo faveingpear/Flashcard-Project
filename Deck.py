@@ -1,6 +1,8 @@
 import base64
 from CustomDictionary import Dict
 from Logger import MyLogger
+from JsonEncoder import MyJsonEncoder
+import json
 
 class Card:
 
@@ -20,6 +22,18 @@ class Card:
     
     def print(self) -> str:
         return self.front_data
+
+    def to_json(self):
+
+        card = {
+            "front_data":self.front_data,
+            "back_data":self.back_data,
+            "data_added":self.date_added,
+            "id":self.id,
+            "order_in_deck":self.order_in_deck
+        }
+
+        return card
 
 class Deck:
 
@@ -79,3 +93,18 @@ class Deck:
 
 # for card in testDeck.cards:
 #     print(card.front_data)
+
+    def saveDeck(self, filelocation):
+
+        self.logger.info(json.dumps(self, cls=MyJsonEncoder))
+
+        #file = open(filelocation, "w")
+        #file.write(json.dumps(self, cls=MyJsonEncoder))
+        #file.close()
+
+    def to_json(self):
+
+        return {
+            "name":self.name,
+            "cards":self.cards
+        }

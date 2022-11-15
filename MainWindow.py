@@ -145,6 +145,9 @@ class Ui_MainWindow(object):
 
     def addDeck(self, MainWindow, deck):
 
+        #self.decks[0].saveDeck(filelocation="")
+        self.logger.info(json.dumps(self.decks, cls=MyJsonEncoder))
+
         Deckentry = QtWidgets.QWidget(self.MainVerticalLayout)
         Deckentry.setObjectName(deck.name)
 

@@ -1,5 +1,6 @@
 
 from Logger import MyLogger
+
 class entry():
 
     def __init__(self,key,value) -> None:
@@ -51,7 +52,7 @@ class Dict():
         for i in range(self.size):
             if self.entries[i].key == key:
                 self.entries[i] = entry(key=key, value=value)
-                
+
     def search(self, key) -> entry:
         for entry in self.entries:
             if entry.key == key:

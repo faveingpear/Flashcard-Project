@@ -81,6 +81,12 @@ class Deck:
         #         self.logger.info("No card with name " + name + " found")
         #         return None
 
+    def modifyCard(self, oldkey, newCard:Card):
+        self.cards.modify(oldkey, newCard)
+
+    def print(self):
+        self.cards.print()
+
 # testDeck = Deck("Italian")
 # testDeck.addCard(Card(
 #     front_data="fare",

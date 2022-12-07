@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from CustomDictionary import DuplicateEntryError
 from Deck import *
 
 class Ui_DeckEditWidget(object):
@@ -65,7 +66,7 @@ class Ui_DeckEditWidget(object):
 
         #self.fillListView()
 
-        self.decks[self.deckComboBox.currentIndex()].deleteCard(self.selectedCard.front_data)
+        #self.decks[self.deckComboBox.currentIndex()].deleteCard(self.selectedCard.front_data)
 
         newCard = Card(
             front_data=self.topTextEdit.toPlainText(),
@@ -76,7 +77,13 @@ class Ui_DeckEditWidget(object):
             order_in_deck=1
         )
 
-        self.decks[self.deckComboBox.currentIndex()].addCard(newCard)
+        #self.decks[self.deckComboBox.currentIndex()].addCard(newCard)
+
+        self.decks[self.deckComboBox.currentIndex()].print()
+
+        self.logger.info("Modiying card: oldkey=" + self.selectedCard.genKey() + " newcard =" + newCard.genKey())
+
+        self.decks[self.deckComboBox.currentIndex()].modifyCard(self.selectedCard.genKey(), newCard)
 
         self.selectedCard = newCard
 

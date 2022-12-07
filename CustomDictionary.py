@@ -11,12 +11,12 @@ class entry():
 
     def to_json(self):
 
-        jsonData = {
-            "key": self.key,
-            "value": self.value
-        }
+        # jsonData = {
+        #     "key": self.key,
+        #     "value": self.value
+        # }
 
-        return jsonData
+        return self.value
 
 class DuplicateEntryError(Exception):
     pass

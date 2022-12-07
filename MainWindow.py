@@ -21,7 +21,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from Logger import MyLogger
 
-
+FILEPATH = "decks.json"
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -101,6 +101,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
 
+        self.actionExit_2.triggered.connect(self.exit)
+
         self.actionNew_Card.triggered.connect(lambda state:self.spawnCardAdderWidget(MainWindow=MainWindow))
         self.actionNew_Deck.triggered.connect(lambda state, x=self, y=MainWindow:self.spawnAddDeckWidget(parent=x, MainWindow=y))
         self.actionEdit_deck.triggered.connect(lambda state, x=self, y=MainWindow:self.spawnDeckEditWidget(parent=x, MainWindow=y))
@@ -116,6 +118,16 @@ class Ui_MainWindow(object):
 
         self.logger.info("Initialized main window")
 
+    def exit(self):
+        self.saveDecks()
+        QtCore.QCoreApplication.exit()
+
+    def saveDecks(self):
+        file = open(FILEPATH, "w")
+        #file.write_through()
+        file.write(json.dumps(self.decks, cls=MyJsonEncoder))
+        file.close()
+        
     def loadDecks(self, MainWindow):
         for deck in self.decks:
 
@@ -146,7 +158,7 @@ class Ui_MainWindow(object):
     def addDeck(self, MainWindow, deck):
 
         #self.decks[0].saveDeck(filelocation="")
-        self.logger.info(json.dumps(self.decks, cls=MyJsonEncoder))
+        #self.logger.info(json.dumps(self.decks, cls=MyJsonEncoder))
 
         Deckentry = QtWidgets.QWidget(self.MainVerticalLayout)
         Deckentry.setObjectName(deck.name)
@@ -234,6 +246,29 @@ class Ui_MainWindow(object):
         self.actionStudy.setText(_translate("MainWindow", "Study"))
         self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
 
+def loadDecks(data):
+
+    decks = []
+
+    for deck in data:
+            newDeck = Deck(name=deck['name'], logger=DeckLogger)
+
+            for card in deck['cards']['entries']:
+
+                print(card)
+                
+                newDeck.addCard(Card(
+                    front_data=card['front_data'],
+                    back_data=card['back_data'],
+                    date_added=card['data_added'],
+                    order_in_deck=card['order_in_deck'],
+                    id=card['id'],
+                    parent_deck=newDeck
+                ))
+
+    decks.append(newDeck)
+
+    return decks
 
 if __name__ == "__main__":
     import sys
@@ -244,17 +279,60 @@ if __name__ == "__main__":
 
     DeckLogger = MyLogger("FlashCard.log", "Deck")
 
-    decks = []
+    try:
+        file = open(FILEPATH, "r")
+        data = json.loads(file.read())
+        file.close()
 
-    testDeck = Deck("Italian", logger=DeckLogger)
-    testDeck.addCard(Card(
-        front_data="fare",
-        back_data="filler",
-        date_added="something",
-        parent_deck = testDeck,
-        order_in_deck = 1,
-        id=1
-    ))
+        decks = loadDecks(data)
+    except json.decoder.JSONDecodeError:
+
+        MainWindowLogger.error("JsonDecodingError")
+        decks = []
+        pass
+    except FileNotFoundError:
+
+        MainWindowLogger.error("File not found, created new file")
+
+        file = open(FILEPATH, "x")
+        file.close()
+
+        decks = []
+        pass
+    except:
+        MainWindowLogger.logger.error(traceback.format_exc())
+        decks = []
+        pass
+
+
+    # # Loaded all the data from the specified file
+    # for deck in data:
+    #     newDeck = Deck(name=deck['name'], logger=DeckLogger)
+
+    #     for card in deck['cards']['entries']:
+
+    #         print(card)
+            
+    #         newDeck.addCard(Card(
+    #             front_data=card['front_data'],
+    #             back_data=card['back_data'],
+    #             date_added=card['data_added'],
+    #             order_in_deck=card['order_in_deck'],
+    #             id=card['id'],
+    #             parent_deck=newDeck
+    #         ))
+
+    #     decks.append(newDeck)
+
+    # testDeck = Deck("Italian", logger=DeckLogger)
+    # testDeck.addCard(Card(
+    #     front_data="fare",
+    #     back_data="filler",
+    #     date_added="something",
+    #     parent_deck = testDeck,
+    #     order_in_deck = 1,
+    #     id=1
+    # ))
     # testDeck.addCard(Card(
     #     front_data="dire",
     #     back_data="filler",
@@ -274,7 +352,7 @@ if __name__ == "__main__":
     #     id=1
     # ))
     
-    decks.append(testDeck)
+    #decks.append(testDeck)
     #decks.append(testDeck2)
     ui = Ui_MainWindow(decks=decks, logger=MainWindowLogger)
 

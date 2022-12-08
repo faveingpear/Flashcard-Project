@@ -38,6 +38,9 @@ class Ui_DeckEditWidget(object):
         self.addButton = QtWidgets.QPushButton(Form)
         self.addButton.setGeometry(QtCore.QRect(360, 20, 75, 23))
         self.addButton.setObjectName("addButton")
+        self.removeButton = QtWidgets.QPushButton(Form)
+        self.removeButton.setGeometry(QtCore.QRect(360-50, 20, 75, 23))
+        self.removeButton.setObjectName("removeButton")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -49,6 +52,8 @@ class Ui_DeckEditWidget(object):
         self.deckComboBox.currentTextChanged.connect(lambda state:self.fillListView())
         self.cardListView.itemClicked.connect(lambda item:self.fillCardWidgets(item=item))
         self.addButton.clicked.connect(lambda state:self.saveCard())
+        self.removeButton.clicked.connect(lambda state:self.deleteCard())
+
 
     def __init__(self, parent, MainWindow, logger, decks):
         self.parent = parent
@@ -58,6 +63,10 @@ class Ui_DeckEditWidget(object):
 
         #self.widgets = [] # For keeping tack of the list view entries. 
         # Not needed since cardListView.clear does the same thing
+
+    def deleteCard(self):
+        self.decks[self.deckComboBox.currentIndex()].deleteCard(self.selectedCard.genKey())
+        self.fillListView()
 
     def saveCard(self):
 
@@ -106,6 +115,7 @@ class Ui_DeckEditWidget(object):
 
             self.cardListView.addItem(newWidget)
 
+
         #selected = self.cardListView.itemClicked.connect(lambda)
         #print(selected)
 
@@ -121,6 +131,7 @@ class Ui_DeckEditWidget(object):
 
     def fillCardWidgets(self, item):
         cardName = item.text()
+        self.logger.info("Clicked item: " + item.text())
         card = self.decks[self.deckComboBox.currentIndex()].searchCard(cardName)
         
         self.topTextEdit.setPlainText(card.front_data)
@@ -133,6 +144,7 @@ class Ui_DeckEditWidget(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.label.setText(_translate("Form", "Choose a Deck:"))
         self.addButton.setText(_translate("Form", "Save"))
+        self.removeButton.setText(_translate("Form", "Delete"))
 
 
 if __name__ == "__main__":

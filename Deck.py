@@ -4,6 +4,8 @@ from Logger import MyLogger
 from JsonEncoder import MyJsonEncoder
 import json
 
+import time
+
 class Card:
 
     def __init__(self, front_data:str, back_data:str, date_added:str, id:int, parent_deck, order_in_deck:int) -> None:
@@ -11,7 +13,7 @@ class Card:
         # Add type checking
         self.front_data = front_data
         self.back_data = back_data
-        self.date_added = date_added
+        self.date_added = time.time()
         self.id = id
         self.parent_deck = parent_deck
         self.order_in_deck = order_in_deck
@@ -52,6 +54,10 @@ class Deck:
 
         self.cards.remove(name)
     
+    def sort(self):
+        print("RUNNING2")
+        self.cards.sort()
+    
     def addCard(self, inputCard:Card):
         self.cards.append(key=inputCard.genKey(), value=inputCard)
         self.logger.info("Added card " + inputCard.front_data)
@@ -81,8 +87,8 @@ class Deck:
         #         self.logger.info("No card with name " + name + " found")
         #         return None
 
-    def modifyCard(self, oldkey, newCard:Card):
-        self.cards.modify(oldkey, newCard)
+    def modifyCard(self, oldKey, newCard:Card):
+        self.cards.modify(oldKey, newCard.genKey(), newCard)
 
     def print(self):
         self.cards.print()

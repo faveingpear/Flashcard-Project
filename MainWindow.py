@@ -123,6 +123,11 @@ class Ui_MainWindow(object):
         QtCore.QCoreApplication.exit()
 
     def saveDecks(self):
+
+        for deck in self.decks:
+            print("RUNNING")
+            deck.sort()
+
         file = open(FILEPATH, "w")
         #file.write_through()
         file.write(json.dumps(self.decks, cls=MyJsonEncoder))
@@ -279,6 +284,8 @@ if __name__ == "__main__":
 
     DeckLogger = MyLogger("FlashCard.log", "Deck")
 
+    #print("testing" < "testina")
+
     try:
         file = open(FILEPATH, "r")
         data = json.loads(file.read())
@@ -303,7 +310,6 @@ if __name__ == "__main__":
         MainWindowLogger.logger.error(traceback.format_exc())
         decks = []
         pass
-
 
     # # Loaded all the data from the specified file
     # for deck in data:

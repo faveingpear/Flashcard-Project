@@ -11,7 +11,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from CustomDictionary import *
-
+from Deck import *
+import traceback
+from cardEdit import Ui_CardEdit
 class Ui_CardSearchWidget(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -48,7 +50,15 @@ class Ui_CardSearchWidget(object):
         self.logger.info("Searching for card")
         try:
             for deck in self.decks:
-                print(deck.searchCard(self.searchLineEdit.text()))
+                card = deck.searchCard(self.searchLineEdit.text())
+                
+                try:
+                    self.cardEdit = QtWidgets.QWidget() # Commits cardEdit to the namespace of the class so it will not be deleted
+                    ui = Ui_CardEdit(card, self.logger)
+                    ui.setupUi(self.cardEdit)
+                    self.cardEdit.show()
+                except Exception as e:
+                    self.logger.error(traceback.format_exc())
         except EntryNotFound:
             self.logger.info("Card not found")
 

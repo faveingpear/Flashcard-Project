@@ -89,14 +89,15 @@ class Dict():
         self.print()
 
     def search(self, key) -> entry:
-        self.logger.info("Searching for key:" + key)
+        self.logger.info("Searching for key:" + key + "d")
         for entry in self.entries:
             if entry.key == key:
                 self.logger.info("Entry found for key:" + key)
                 return entry.value
             else:
-                self.logger.info("Entry not found for key" + key)
-                raise EntryNotFound 
+                pass
+        self.logger.info("Entry not found for key:" + key)
+        raise EntryNotFound 
     
     def checkDuplicate(self, key) -> bool:
 

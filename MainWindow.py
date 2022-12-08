@@ -170,11 +170,30 @@ class Ui_MainWindow(object):
             pushButton = QtWidgets.QPushButton(Deckentry)
             pushButton.clicked.connect(lambda state, x=deck:self.spawnStudyDialog(MainWindow=MainWindow,deck=x))
             pushButton.setText("Study")
+            deleteButton = QtWidgets.QPushButton(Deckentry)
+            deleteButton.clicked.connect(lambda state, x=deck:self.deleteDeck(MainWindow=MainWindow,deck=x))
+            deleteButton.setText("Delete")
             horizontalLayout.addWidget(pushButton)
+            horizontalLayout.addWidget(deleteButton)
 
             self.verticalLayout_3.addWidget(Deckentry)
 
             self.logger.info("Loaded deck:" + deck.name)
+        
+    def deleteDeck(self, MainWindow, deck):
+        self.logger.info("Deleting Deck " + deck.name)
+        
+        for i in range(len(self.decks)):
+            #print(i)
+            #print(str(self.decks))
+            #print(self.decks[i].name + " = " + deck.name)
+            if self.decks[i].name == deck.name:
+                del self.decks[i]
+                widget = self.verticalLayout_3.takeAt(i+1)
+                if widget.widget():
+                    widget.widget().deleteLater()
+                return
+
 
     def addDeck(self, MainWindow, deck):
 
@@ -199,7 +218,11 @@ class Ui_MainWindow(object):
         pushButton = QtWidgets.QPushButton(Deckentry)
         pushButton.clicked.connect(lambda state, x=deck:self.spawnStudyDialog(MainWindow=MainWindow,deck=x))
         pushButton.setText("Study")
+        deleteButton = QtWidgets.QPushButton(Deckentry)
+        deleteButton.clicked.connect(lambda state, x=deck:self.deleteDeck(MainWindow=MainWindow,deck=x))
+        deleteButton.setText("Delete")
         horizontalLayout.addWidget(pushButton)
+        horizontalLayout.addWidget(deleteButton)
 
         self.verticalLayout_3.addWidget(Deckentry)
 
@@ -238,7 +261,7 @@ class Ui_MainWindow(object):
             ui.setupUi(self.AddCardDialog)
             self.AddCardDialog.show()
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(traceback.format_exc())
 
     def spawnStudyDialog(self, MainWindow, deck):
         try:
@@ -248,7 +271,7 @@ class Ui_MainWindow(object):
             ui.loadCard()
             self.studyDialog.show()
         except Exception as e:
-            self.logger.error(e)
+            self.logger.error(traceback.format_exc())
         #MainWindow.setDisabled(True)
 
     def retranslateUi(self, MainWindow):
@@ -275,6 +298,8 @@ def loadDecks(data):
     for deck in data:
             newDeck = Deck(name=deck['name'], logger=DeckLogger)
 
+            print(str(deck))
+
             for card in deck['cards']['entries']:
 
                 print(card)
@@ -288,7 +313,9 @@ def loadDecks(data):
                     parent_deck=newDeck
                 ))
 
-    decks.append(newDeck)
+            decks.append(newDeck)
+
+    print("Loaded decks:" + str(decks))
 
     return decks
 
@@ -382,7 +409,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     ui.loadDecks(MainWindow)
     MainWindow.show()
-    try:
-        sys.exit(app.exec_())
-    except Exception as e:
-        MainWindowLogger.logger.error(traceback.format_exc())
+    sys.exit(app.exec_())

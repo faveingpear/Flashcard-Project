@@ -63,8 +63,8 @@ class Ui_FlashCardAddWidget(object):
 
     def addCard(self):
         deck_index = self.comboBox.currentIndex()
-        top = self.plainTextEdit.toPlainText()
-        bottom = self.plainTextEdit_2.toPlainText()
+        top = self.plainTextEdit.toPlainText().strip()
+        bottom = self.plainTextEdit_2.toPlainText().strip()
 
         try:
             self.decks[deck_index].addCard(Card(
@@ -77,7 +77,6 @@ class Ui_FlashCardAddWidget(object):
             )
             )
 
-            
             self.plainTextEdit.clear()
             self.plainTextEdit_2.clear()
 

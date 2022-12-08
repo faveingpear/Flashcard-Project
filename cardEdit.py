@@ -10,8 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
-class Ui_Form(object):
+from CustomDictionary import *
+from Deck import *
+class Ui_CardEdit(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(267, 256)
@@ -33,20 +34,50 @@ class Ui_Form(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
 
+        self.saveButton.clicked.connect(lambda state:self.save())
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
+
+        self.fillUi()
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.saveButton.setText(_translate("Form", "Save"))
 
+    def __init__(self, card:Card, logger) -> None:
+        #self.topCardEdit.setText(card.front_data)
+        #self.buttomCardEdit.setText(card.back_data)
+        self.card = card
+        self.logger = logger
+    
+    def fillUi(self):
+
+        self.topCardEdit.setText(self.card.front_data)
+        self.buttomCardEdit.setText(self.card.back_data)
+
+    def save(self):
+
+        self.logger.info("Save button clicked, saving card")
+        
+        newCard = Card(
+            front_data=self.topCardEdit.toPlainText().strip(),
+            back_data=self.buttomCardEdit.toPlainText().strip(),
+            date_added=self.card.date_added,
+            id=self.card.id,
+            parent_deck=self.card.parent_deck,
+            order_in_deck=self.card.order_in_deck
+        )
+
+        self.card.parent_deck.modifyCard(self.card.genKey(), newCard)
+
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
-    ui = Ui_Form()
+    ui = Ui_CardEdit()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())

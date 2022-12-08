@@ -13,6 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from CustomDictionary import DuplicateEntryError
 from Deck import *
 
+import time
+
 class Ui_DeckEditWidget(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -80,10 +82,10 @@ class Ui_DeckEditWidget(object):
         newCard = Card(
             front_data=self.topTextEdit.toPlainText(),
             back_data=self.bottomTextEdit.toPlainText(),
-            date_added="filler",
+            date_added=time.time(),
             id=1,
             parent_deck=self.decks[self.deckComboBox.currentIndex()],
-            order_in_deck=1
+            order_in_deck=len(self.decks[self.deckComboBox.currentIndex()].cards)+1
         )
 
         #self.decks[self.deckComboBox.currentIndex()].addCard(newCard)

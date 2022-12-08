@@ -55,7 +55,6 @@ class Deck:
         self.cards.remove(name)
     
     def sort(self):
-        print("RUNNING2")
         self.cards.sort()
     
     def addCard(self, inputCard:Card):

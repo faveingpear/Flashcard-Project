@@ -29,6 +29,9 @@ class DuplicateEntryError(Exception):
 class ObjectNotComparableError(Exception):
     pass
 
+class EntryNotFound(Exception):
+    pass
+
 class Dict():
 
     #entries:entry = [] #DO NOT MAKE THIS A CLASS VARIABLE
@@ -68,7 +71,6 @@ class Dict():
         self.print()
 
     def sort(self):
-        print("RUNNING 3")
         self.logger.info("Sorting dict")
         for step in range(1, len(self.entries)):
             key = self.entries[step].key
@@ -94,8 +96,8 @@ class Dict():
                 return entry.value
             else:
                 self.logger.info("Entry not found for key" + key)
-                pass
-
+                raise EntryNotFound 
+    
     def checkDuplicate(self, key) -> bool:
 
         for entry in self.entries:

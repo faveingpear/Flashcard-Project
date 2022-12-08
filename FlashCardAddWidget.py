@@ -16,6 +16,7 @@ from CustomDictionary import DuplicateEntryError
 
 from Logger import MyLogger
 
+import time
 
 class Ui_FlashCardAddWidget(object):
     def setupUi(self, Form):
@@ -69,7 +70,7 @@ class Ui_FlashCardAddWidget(object):
             self.decks[deck_index].addCard(Card(
                 front_data=top,
                 back_data=bottom,
-                date_added="something",
+                date_added=time.time(),
                 parent_deck = self.decks[deck_index],
                 order_in_deck = len(self.decks[deck_index].cards)+1,
                 id=1

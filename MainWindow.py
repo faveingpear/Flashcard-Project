@@ -16,6 +16,7 @@ from FLashCardWidget import Ui_FlashCardWidget
 from StudySelectDiolog import Ui_StudySelectDiolog
 from AddDeckWidget import Ui_AddDeckWidget
 from DeckEditWidget import Ui_DeckEditWidget
+from cardSearch import Ui_CardSearchWidget
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -88,6 +89,8 @@ class Ui_MainWindow(object):
         self.actionStudy.setObjectName("actionStudy")
         self.actionPreferences = QtWidgets.QAction(MainWindow)
         self.actionPreferences.setObjectName("actionPreferences")
+        self.actionSearch = QtWidgets.QAction(MainWindow)
+        self.actionSearch.setObjectName("actionSearch")
         self.menuFile.addAction(self.actionImport)
         self.menuFile.addAction(self.actionExport)
         self.menuFile.addAction(self.actionBackup_all)
@@ -97,6 +100,7 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionEdit_deck)
         self.menuTools.addAction(self.actionStudy)
         self.menuTools.addAction(self.actionPreferences)
+        self.menuTools.addAction(self.actionSearch)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuTools.menuAction())
@@ -106,6 +110,7 @@ class Ui_MainWindow(object):
         self.actionNew_Card.triggered.connect(lambda state:self.spawnCardAdderWidget(MainWindow=MainWindow))
         self.actionNew_Deck.triggered.connect(lambda state, x=self, y=MainWindow:self.spawnAddDeckWidget(parent=x, MainWindow=y))
         self.actionEdit_deck.triggered.connect(lambda state, x=self, y=MainWindow:self.spawnDeckEditWidget(parent=x, MainWindow=y))
+        self.actionSearch.triggered.connect(lambda state, x=self, y=MainWindow:self.spawnSearch(parent=x, MainWindow=y))
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -117,6 +122,17 @@ class Ui_MainWindow(object):
         self.logger = logger
 
         self.logger.info("Initialized main window")
+
+    def spawnSearch(self, parent, MainWindow):
+        print("test")
+        try:
+            self.logger.info("Spawing searchWidget")
+            self.searchWidget = QtWidgets.QWidget()
+            ui = Ui_CardSearchWidget(parent=parent, MainWindow=MainWindow, logger=self.logger, decks=self.decks)
+            ui.setupUi(self.searchWidget)
+            self.searchWidget.show()
+        except Exception as e:
+            self.logger.error(traceback.format_exc())
 
     def exit(self):
         self.saveDecks()
@@ -250,6 +266,7 @@ class Ui_MainWindow(object):
         self.actionNew_Card.setText(_translate("MainWindow", "New Card"))
         self.actionStudy.setText(_translate("MainWindow", "Study"))
         self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
+        self.actionStudy.setText(_translate("MainWindow", "Study"))
 
 def loadDecks(data):
 

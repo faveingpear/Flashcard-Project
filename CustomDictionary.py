@@ -11,12 +11,6 @@ class entry():
         print("["  + str(self.key) + ":" + str(self.value) + "]")
 
     def to_json(self):
-
-        # jsonData = {
-        #     "key": self.key,
-        #     "value": self.value
-        # }
-
         return self.value
     
     #def compare(self, other:str):
@@ -63,39 +57,32 @@ class Dict():
 
         self.logger.info("Modifying key:" + oldKey)
 
-        for i in range(self.size):
-            if self.entries[i].key == oldKey:
+        for i in range(self.size): # Loop through the length of the array
+            if self.entries[i].key == oldKey: # If the key of the entry matches the oldKey
                 #self.entries[i] = None
-                self.entries[i] = entry(key=newKey, value=value)
-        
-        self.print()
+                self.entries[i] = entry(key=newKey, value=value) # Change the pointer to the new entry
 
     def sort(self):
         self.logger.info("Sorting dict")
-        for step in range(1, len(self.entries)):
+        for step in range(1, len(self.entries)): # Starts looping though the array from 1 to the size
             key = self.entries[step].key
             temp = self.entries[step]
             j = step - 1
 
-            while j>= 0 and key < self.entries[j].key:
+            while j>= 0 and key < self.entries[j].key: # If the current key is less than the next key, then move it over once
                 self.entries[j+1] = self.entries[j]
-                #self.entries[j] = self.entries[step]
                 j = j - 1
 
             self.entries[j + 1] = temp
             
-            #self.entries[j+1].key = key
-
-        self.print()
-
     def search(self, key) -> entry:
         self.logger.info("Searching for key:" + key + "d")
-        for entry in self.entries:
-            if entry.key == key:
+        for entry in self.entries: # Loop through all entries in the dictionary
+            if entry.key == key: # If the key of the entry matches the inputed key
                 self.logger.info("Entry found for key:" + key)
-                return entry.value
+                return entry.value # Return the value
             else:
-                pass
+                pass # Else do nothing
         self.logger.info("Entry not found for key:" + key)
         raise EntryNotFound 
     
@@ -108,7 +95,6 @@ class Dict():
         return False
     
     def remove(self, key) -> None:
-        print(self.size)
         for i in range(len(self.entries)):
             if self.entries[i].key == key: # If the entry key matches the inputed key
                 for x in range((self.size-1)-i): # Shift every entry after the key to the left one

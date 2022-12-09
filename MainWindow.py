@@ -124,7 +124,6 @@ class Ui_MainWindow(object):
         self.logger.info("Initialized main window")
 
     def spawnSearch(self, parent, MainWindow):
-        print("test")
         try:
             self.logger.info("Spawing searchWidget")
             self.searchWidget = QtWidgets.QWidget()
@@ -141,7 +140,6 @@ class Ui_MainWindow(object):
     def saveDecks(self):
 
         for deck in self.decks:
-            print("RUNNING")
             deck.sort()
 
         file = open(FILEPATH, "w")
@@ -184,9 +182,6 @@ class Ui_MainWindow(object):
         self.logger.info("Deleting Deck " + deck.name)
         
         for i in range(len(self.decks)):
-            #print(i)
-            #print(str(self.decks))
-            #print(self.decks[i].name + " = " + deck.name)
             if self.decks[i].name == deck.name:
                 del self.decks[i]
                 widget = self.verticalLayout_3.takeAt(i+1)
@@ -289,7 +284,7 @@ class Ui_MainWindow(object):
         self.actionNew_Card.setText(_translate("MainWindow", "New Card"))
         self.actionStudy.setText(_translate("MainWindow", "Study"))
         self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
-        self.actionStudy.setText(_translate("MainWindow", "Study"))
+        self.actionSearch.setText(_translate("MainWindow", "Search"))
 
 def loadDecks(data):
 
@@ -298,11 +293,8 @@ def loadDecks(data):
     for deck in data:
             newDeck = Deck(name=deck['name'], logger=DeckLogger)
 
-            print(str(deck))
-
             for card in deck['cards']['entries']:
 
-                print(card)
                 
                 newDeck.addCard(Card(
                     front_data=card['front_data'],
@@ -315,8 +307,6 @@ def loadDecks(data):
 
             decks.append(newDeck)
 
-    print("Loaded decks:" + str(decks))
-
     return decks
 
 if __name__ == "__main__":
@@ -327,8 +317,6 @@ if __name__ == "__main__":
     MainWindowLogger = MyLogger("FlashCard.log", "GUI")
 
     DeckLogger = MyLogger("FlashCard.log", "Deck")
-
-    #print("testing" < "testina")
 
     try:
         file = open(FILEPATH, "r")
@@ -355,58 +343,13 @@ if __name__ == "__main__":
         decks = []
         pass
 
-    # # Loaded all the data from the specified file
-    # for deck in data:
-    #     newDeck = Deck(name=deck['name'], logger=DeckLogger)
-
-    #     for card in deck['cards']['entries']:
-
-    #         print(card)
-            
-    #         newDeck.addCard(Card(
-    #             front_data=card['front_data'],
-    #             back_data=card['back_data'],
-    #             date_added=card['data_added'],
-    #             order_in_deck=card['order_in_deck'],
-    #             id=card['id'],
-    #             parent_deck=newDeck
-    #         ))
-
-    #     decks.append(newDeck)
-
-    # testDeck = Deck("Italian", logger=DeckLogger)
-    # testDeck.addCard(Card(
-    #     front_data="fare",
-    #     back_data="filler",
-    #     date_added="something",
-    #     parent_deck = testDeck,
-    #     order_in_deck = 1,
-    #     id=1
-    # ))
-    # testDeck.addCard(Card(
-    #     front_data="dire",
-    #     back_data="filler",
-    #     date_added="something",
-    #     parent_deck = testDeck,
-    #     order_in_deck = 2,
-    #     id=2
-    # ))
-
-    # testDeck2 = Deck("Computer Science", logger=DeckLogger)
-    # testDeck2.addCard(Card(
-    #     front_data="fare",
-    #     back_data="filler",
-    #     date_added="something",
-    #     parent_deck = testDeck2,
-    #     order_in_deck = 1,
-    #     id=1
-    # ))
-    
-    #decks.append(testDeck)
-    #decks.append(testDeck2)
     ui = Ui_MainWindow(decks=decks, logger=MainWindowLogger)
 
     ui.setupUi(MainWindow)
     ui.loadDecks(MainWindow)
+
+    # for deck in decks:
+    #     deck.print()
+
     MainWindow.show()
     sys.exit(app.exec_())

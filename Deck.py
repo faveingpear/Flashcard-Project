@@ -66,25 +66,7 @@ class Deck:
         return self.cards[index]
 
     def searchCard(self, name) -> Card:
-        # for card in self.cards:
-        #     if card.front_data == name:
-        #         self.logger.info("Card with name " + name + "found")
-        #         return card
-
-        # self.logger.info("No card with name " + name)
-        # self.logger.info("Current state of deck")
-        # self.cards.print()
-        
         return self.cards.search(name)
-
-        # for i in range(len(self.cards)):
-
-        #     if self.cards[i].front_data == name:
-        #         self.logger.info("Card found with name " + name)
-        #         return self.cards[i]
-        #     else:
-        #         self.logger.info("No card with name " + name + " found")
-        #         return None
 
     def modifyCard(self, oldKey, newCard:Card):
         self.cards.modify(oldKey, newCard.genKey(), newCard)
@@ -92,26 +74,9 @@ class Deck:
     def print(self):
         self.cards.print()
 
-# testDeck = Deck("Italian")
-# testDeck.addCard(Card(
-#     front_data="fare",
-#     back_data="filler",
-#     date_added="something",
-#     parent_deck = testDeck,
-#     order_in_deck = 1,
-#     id=1
-# ))
-
-# for card in testDeck.cards:
-#     print(card.front_data)
-
     def saveDeck(self, filelocation):
 
         self.logger.info(json.dumps(self, cls=MyJsonEncoder))
-
-        #file = open(filelocation, "w")
-        #file.write(json.dumps(self, cls=MyJsonEncoder))
-        #file.close()
 
     def to_json(self):
 

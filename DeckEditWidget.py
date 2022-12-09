@@ -41,7 +41,7 @@ class Ui_DeckEditWidget(object):
         self.addButton.setGeometry(QtCore.QRect(360, 20, 75, 23))
         self.addButton.setObjectName("addButton")
         self.removeButton = QtWidgets.QPushButton(Form)
-        self.removeButton.setGeometry(QtCore.QRect(360-50, 20, 75, 23))
+        self.removeButton.setGeometry(QtCore.QRect(360-50, 20, 50, 23))
         self.removeButton.setObjectName("removeButton")
 
         self.retranslateUi(Form)
@@ -88,10 +88,6 @@ class Ui_DeckEditWidget(object):
             order_in_deck=len(self.decks[self.deckComboBox.currentIndex()].cards)+1
         )
 
-        #self.decks[self.deckComboBox.currentIndex()].addCard(newCard)
-
-        self.decks[self.deckComboBox.currentIndex()].print()
-
         self.logger.info("Modiying card: oldkey=" + self.selectedCard.genKey() + " newcard =" + newCard.genKey())
 
         self.decks[self.deckComboBox.currentIndex()].modifyCard(self.selectedCard.genKey(), newCard)
@@ -99,7 +95,6 @@ class Ui_DeckEditWidget(object):
         self.selectedCard = newCard
 
         self.fillListView()
-        #self.fillCardWidgets()
 
     def fillComboBox(self):
 
@@ -116,20 +111,6 @@ class Ui_DeckEditWidget(object):
             newWidget.setText(self.decks[self.deckComboBox.currentIndex()].cards[i].front_data)
 
             self.cardListView.addItem(newWidget)
-
-
-        #selected = self.cardListView.itemClicked.connect(lambda)
-        #print(selected)
-
-
-        # for card in self.decks[self.deckComboBox.currentIndex()].cards:
-
-        #     newWidget = QtWidgets.QListWidgetItem()
-
-        #     newWidget.setText(card.front_data)
-
-        #     self.cardListView.addItem(newWidget)
-        #     pass
 
     def fillCardWidgets(self, item):
         cardName = item.text()

@@ -47,10 +47,14 @@ class Ui_CardSearchWidget(object):
         self.decks = decks
 
     def search(self):
-        self.logger.info("Searching for card")
-        try:
-            for deck in self.decks:
+        #self.logger.info("Searching for card")
+        for deck in self.decks:
+            try:
+                self.logger.info("Searching for card " + "in deck " + deck.name)
+                start = time.perf_counter()
                 card = deck.searchCard(self.searchLineEdit.text())
+                end = time.perf_counter()
+                print("Time for search of key " + self.searchLineEdit.text() + ": " + str(end-start))
                 
                 try:
                     self.cardEdit = QtWidgets.QWidget() # Commits cardEdit to the namespace of the class so it will not be deleted
@@ -59,8 +63,8 @@ class Ui_CardSearchWidget(object):
                     self.cardEdit.show()
                 except Exception as e:
                     self.logger.error(traceback.format_exc())
-        except EntryNotFound:
-            self.logger.info("Card not found")
+            except EntryNotFound:
+                self.logger.info("Card not found")
 
 if __name__ == "__main__":
     import sys

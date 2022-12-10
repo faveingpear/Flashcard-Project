@@ -18,7 +18,7 @@ class Card:
         self.parent_deck = parent_deck
         self.order_in_deck = order_in_deck
 
-    def genKey(self) -> base64:
+    def genKey(self) -> str:
         #return self.front_data
         return self.front_data
     

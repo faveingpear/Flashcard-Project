@@ -22,6 +22,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from Logger import MyLogger
 
+import requests
+
 FILEPATH = "decks.json"
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -140,6 +142,7 @@ class Ui_MainWindow(object):
     def saveDecks(self):
 
         for deck in self.decks:
+            deck.print()
             deck.sort()
 
         file = open(FILEPATH, "w")
@@ -309,6 +312,23 @@ def loadDecks(data):
 
     return decks
 
+def genRandomWord(deck:Deck):
+
+    word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
+
+    response = requests.get(word_site)
+    WORDS = response.content.splitlines()
+
+    for word in WORDS:
+        deck.addCard(Card(
+            front_data=word.decode("utf-8"),
+            back_data="Filler",
+            date_added="filler",
+            id=1,
+            order_in_deck=deck.cards.size,
+            parent_deck=deck
+        ))
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -344,6 +364,16 @@ if __name__ == "__main__":
         pass
 
     ui = Ui_MainWindow(decks=decks, logger=MainWindowLogger)
+
+
+    ## For Benchmarking
+
+    randomDeck = Deck(name="Random", logger=DeckLogger)
+
+    genRandomWord(randomDeck)
+
+    decks.append(randomDeck)
+
 
     ui.setupUi(MainWindow)
     ui.loadDecks(MainWindow)
